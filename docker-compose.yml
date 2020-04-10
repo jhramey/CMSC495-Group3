@@ -1,0 +1,31 @@
+version: '3.4'
+
+services: 
+    apache:
+        image: httpd:2.4.35-alpine
+        ports:
+            - 80:80
+        expose: 
+            - 80  
+        volumes:
+            - ./public_html:/usr/local/apache2/htdocs
+        depends_on:
+            - php
+            - db
+
+    php:
+        image: php:7.3-rc-fpm-alpine
+        volumes:
+            - ./public_html:/usr/local/apache2/htdocs
+
+    db:
+        image: mariadb:latest
+        volumes:
+            - ./database:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+
+    adminer:
+        image: adminer
+        ports:
+            - 8080:8080
