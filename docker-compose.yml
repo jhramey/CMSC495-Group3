@@ -2,28 +2,32 @@ version: '3.4'
 
 services: 
     apache:
-        image: httpd:2.4.35-alpine
+        build: 
+            context: ./public_html
         ports:
             - 80:80
         expose: 
             - 80  
         volumes:
-            - ./public_html:/usr/local/apache2/htdocs
+            - ./public_html:/var/www/html
         depends_on:
-            - php
+            #- php
             - db
+        links: 
+            - db:db
 
-    php:
-        image: php:7.3-rc-fpm-alpine
-        volumes:
-            - ./public_html:/usr/local/apache2/htdocs
+    #php:
+    #    image: php:7.3-rc-fpm-alpine
+    #    volumes:
+    #        - ./public_html:/var/www/html
 
     db:
         image: mariadb:latest
         volumes:
-            - ./database:/var/lib/mysql
+            - ./database:/docker-entrypoint-initdb.d
         environment:
             MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: ConsumerWebsite
 
     adminer:
         image: adminer
