@@ -1,0 +1,113 @@
+/*Styles for Top of every webpage, header and link bar*/
+body {
+    background-color: lightsteelblue;
+}
+
+#navigate {
+    text-decoration: none;
+    color: black;
+}
+
+#header {
+    width: 100%;
+    height: 60px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+#link-bar {
+    background-color: white;
+    width: 100%;
+    height: 70px;
+    font-family: arial;
+}
+
+#link {
+    float: left;
+    width: 25%;
+    height: 75px;
+    text-align: center;
+}
+
+/*Styles for items on home page*/
+
+#home-block {
+    width: 100%;
+    height: 250px;
+    font-size: 20px;
+}
+
+#home-body {
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+#home-img {
+    width: 200px;
+    height: 200px;
+}
+
+#logo {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 50px;
+}
+
+#names {
+    font-size: 50px;
+}
+
+#name-block {
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+}
+
+#name-body {
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+
+#personal-body {
+    float: left;
+    width: 75%;
+    text-align: center;
+}
+
+/*Styles for items on merch/account page*/
+
+#item {
+    background-color: white;
+    width: 400px;
+    height: 575px;
+    text-align: center;
+    float:left;
+}
+
+#item-image {
+    width: 400px;
+    height: 400px;
+}
+
+button {
+    width: 198px;
+    height: 50px;
+}
+
+#space {
+    width:200px;
+    height:575px;
+    float:left;
+}
+
+/*Styles for items on login page*/
+
+#login-div {
+    width: 100%;
+    height: 700px;
+    text-align:center;
+}
+
+#login {
+    vertical-align: middle;
+}
