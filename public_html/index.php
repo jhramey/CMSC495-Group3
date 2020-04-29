@@ -56,7 +56,7 @@
                 <h1 id="names">R</h1>
             </div>
             <div id="personal-body" style="text-align: left">
-                <p>Ryan Ritchie - </p>
+                <p>Ryan Ritchie - Ryan is set to graduate from UMGC this May with bachelor's in computer science. He originally went to Frederick Community college where he graduate with associate's degree in computer science. </p>
             </div>
         </div>
         <div id="name-block">
@@ -67,5 +67,6 @@
                 <p>Steven Fingold - </p>
             </div>
         </div>
+   <?php include('bottombar.php'); ?>
     </body>
 </html>
