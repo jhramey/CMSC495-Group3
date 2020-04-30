@@ -3,6 +3,7 @@
 require_once "config.php";
 
 $fname = $lname = "";
+$fname_err = $lname_err = "";
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
  
@@ -12,6 +13,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate Name
     $fname = trim($_POST["fname"]);
     $lname = trim($_POST["lname"]);
+
+    if(empty($fname)) {
+        $fname_err = "Please enter a first name.";
+    } else if (preg_match('[\W]', $fname)) {
+        $fname_err = "First name cannot contain special characters";
+    }
+
+    if(empty($lname)) {
+        $lname_err = "Please enter a last name.";
+    } else if (preg_match('[\W]', $lname)) {
+        $lname_err = "Last name cannot contain special characters";
+    }
  
     // Validate username
     if(empty(trim($_POST["username"]))){
@@ -65,16 +78,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
+    if(empty($fname_err) && empty($lname_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        $sql = "INSERT INTO users (firstName, lastName, username, password) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_fname, $param_lname, $param_username, $param_password);
             
             // Set parameters
+            $param_fname = $fname;
+            $param_lname = $lname;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
@@ -106,10 +121,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <label for="fname">First name:</label>
             <br>
             <input type="text" id="fname" name="fname" value="<?php echo $fname; ?>">
+            <span class="error"> <?php echo $fname_err;?></span>
             <br>
             <label for="lname">Last name:</label>
             <br>
             <input type="text" id="lname" name="lname" value="<?php echo $lname; ?>">
+            <span class="error"> <?php echo $lname_err;?></span>
             <br>
             <label for="username">Username:</label>
             <br>
