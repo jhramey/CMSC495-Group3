@@ -6,8 +6,6 @@
     </head>
     <body>
         <?php include('navbar.php'); ?>
-        <a href="JJRS_Login.php">Login</a>
-        <a href="JJRS_Register.php">Register</a>
         <h3>Your Wishlist:</h3>
         <div id="item">
             <h3>Black T-Shirt</h3>
