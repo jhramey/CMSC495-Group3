@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,12 +13,22 @@
                 <h1>JJRS Merch</h1>
             </div>
             <div id="right-space">
-                <a href="JJRS_Login.php">
-                    <button id="login-register">Login</button>
-                </a>
-                <a href="JJRS_Register.php">
-                    <button id="login-register">Register</button>
-                </a>
+                <?php
+                    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+                        echo '<h2 style="display:inline;">Hello, ' . $_SESSION['firstName'] . ' </h2><a href="logout.php">
+                        <button id="login-register" style="float:none">Logout</button>
+                    </a>';
+                    } else {
+                        echo '<a href="JJRS_Login.php">
+                        <button id="login-register">Login</button>
+                    </a>
+                    <a href="JJRS_Register.php">
+                        <button id="login-register">Register</button>
+                    </a>';
+                    }
+                    
+                    
+                ?>
             </div>
         </div>
         <div id="link-bar">
