@@ -1,28 +1,28 @@
 <?php
-require_once "configstore.php";
+require_once "config.php";
 
 
-$fname = $type = $color = "";
+$name = $type = $color = "";
 $cost = $quan = $pic = "";
-$fname_err = $type_err = $color_err = "";
+$name_err = $type_err = $color_err = "";
 $cost_err = $quan_err = $pic_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     // Validate Product Name
-    if(empty(trim($_POST["fname"]))){
-        $fname_err = "Please enter a Product Name.";
+    if(empty(trim($_POST["name"]))){
+        $name_err = "Please enter a Product Name.";
     } else{
         // Prepare a select statement
-        $sql = "SELECT id FROM store WHERE fname = ?";
+        $sql = "SELECT id FROM store WHERE name = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_fname);
+            mysqli_stmt_bind_param($stmt, "s", $param_name);
             
             // Set parameters
-            $param_fname = trim($_POST["fname"]);
+            $param_name = trim($_POST["name"]);
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -30,9 +30,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 mysqli_stmt_store_result($stmt);
                 
                 if(mysqli_stmt_num_rows($stmt) == 1){
-                    $fname_err = "This product name is already taken.";
+                    $name_err = "This product name is already taken.";
                 } else{
-                    $fname = trim($_POST["fname"]);
+                    $name = trim($_POST["name"]);
                 }
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -80,17 +80,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     // Check input errors before inserting in database
-    if(empty($fname_err) && empty($type_err) && empty($confirm_password_err) && empty($color_err) && empty($quan_err) && empty($pic_password_err)){
+    if(empty($name_err) && empty($type_err) && empty($confirm_password_err) && empty($color_err) && empty($quan_err) && empty($pic_password_err)){
         
         // Prepare an insert statement
-        $sql = "INSERT INTO store (fname, type, color, cost, quan, pic) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO store (name, type, color, cost, quan, pic) VALUES (?, ?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss" ,$param_fname, $param_type, $param_color, $param_cost, $param_quan, $param_pic);
+            mysqli_stmt_bind_param($stmt, "ss" ,$param_name, $param_type, $param_color, $param_cost, $param_quan, $param_pic);
             
             // Set parameters
-            $param_fname = $fname;
+            $param_name = $name;
             $param_type = $type;
             $param_color =$color;
             $param_cost =$cost;
@@ -138,7 +138,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	</div>
 <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 <font size ="+2">
- Product Name: <input type="text" id="fname" size="40" name="fname" value="<?php echo $fname; ?>">
+ Product Name: <input type="text" id="name" size="40" name="name" value="<?php echo $name; ?>">
 <br>
  <label for="type">Type:</label>
 <select id="type" value="<?php echo $type; ?>">
