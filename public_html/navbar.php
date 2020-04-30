@@ -5,7 +5,16 @@
     </head>
     <body>
         <div id="header">
-            <h1>JJRS Merch</h1>
+            <div id="left-header">
+                <h1>JJRS Merch</h1>
+            </div>
+            <div id="right-space"></div>
+                <a href="JJRS_Login.php">
+                    <button id="login-register">Login</button>
+                </a>
+                <a href="JJRS_Register.php">
+                    <button id="login-register">Register</button>
+                </a>
         </div>
         <div id="link-bar">
             <div id="link">
