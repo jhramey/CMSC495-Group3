@@ -1,11 +1,20 @@
 <?php
+session_start();
 require_once "config.php";
 
 
 $name = $type = $color = "";
-$cost = $quan = $pic = "";
+$cost = $quantity = "";
 $name_err = $type_err = $color_err = "";
-$cost_err = $quan_err = $pic_err = "";
+$cost_err = $quantity_err = "";
+
+// File Upload Variables
+$targetDir = "images/";
+$fileName = basename($_FILES["file"]["name"]);
+$targetFilePath = $targetDir . $fileName;
+$fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+$fileStatusMsg = "";
+
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -45,57 +54,66 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate type
     if(empty(trim($_POST["type"]))){
         $type_err = "Please select a type.";     
- 
     } else{
         $type = trim($_POST["type"]);
     }
     
-      // Validate color
+    // Validate color
     if(empty(trim($_POST["color"]))){
         $color_err = "Please select a color.";     
     } else{
         $color = trim($_POST["color"]);
     }
 
-   // Validate cost
+    // Validate cost
     if(empty(trim($_POST["cost"]))){
         $cost_err = "Please enter a cost.";     
     } else{
         $cost = trim($_POST["cost"]);
     } 
 
-   // Validate quantity
-    if(empty(trim($_POST["quan"]))){
-        $quan_err = "Please enter a quantity.";     
+    // Validate quantity
+    if(empty(trim($_POST["quantity"]))){
+        $quantity_err = "Please enter a quantity.";     
     } else{
         $quantity = trim($_POST["quantity"]);
     }
-   // Validate Picture
-     if(empty(trim($_POST["pic"]))){
-        $pic_err = "Please enter a URL to a picture.";     
-    } else{
-        $pic = trim($_POST["pic"]);
-    }
-
-
 
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($type_err) && empty($confirm_password_err) && empty($color_err) && empty($quan_err) && empty($pic_password_err)){
+    if(empty($name_err) && empty($type_err) && empty($confirm_password_err) && empty($color_err) && empty($quantity_err)) {
+
+        // Validate Picture after confirming other values are satisfied
+        if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"])){
+            // Allow certain file formats
+            $allowTypes = array('jpg','png','jpeg','gif','pdf');
+            if(in_array($fileType, $allowTypes)){
+                // Upload file to server
+                if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
+                    // True if successful
+                } else{
+                    $fileStatusMsg = "Sorry, there was an error uploading your file.";
+                }
+            } else{
+                $fileStatusMsg = 'Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed to upload.';
+            }
+        } else{
+            $fileStatusMsg = 'Please select a file to upload.';
+        }
         
         // Prepare an insert statement
-        $sql = "INSERT INTO store (name, type, color, cost, quan, pic) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO store (name, type, color, cost, quantity, pic) VALUES (?, ?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss" ,$param_name, $param_type, $param_color, $param_cost, $param_quan, $param_pic);
+            mysqli_stmt_bind_param($stmt, "sssdis" ,$param_name, $param_type, $param_color, $param_cost, $param_quantity, $param_pic);
             
             // Set parameters
             $param_name = $name;
             $param_type = $type;
-            $param_color =$color;
-            $param_cost =$cost;
-            $param_quan =$quan;
-            $param_pic = $pic;
+            $param_color = $color;
+            $param_cost = $cost;
+            $param_quantity = $quantity;
+            $param_pic = $targetFilePath;
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                
@@ -109,19 +127,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     mysqli_close($link);
 }
-
-
-
-
-
 ?>
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html>
@@ -131,40 +137,48 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </head>
     <body>
         <?php include('navbar.php'); ?>
-       <h1>Admin Page</h1>
+        <h1>Admin Page</h1>
 	<div class="row">
-	<button>Home</button>
-	<button>Orders</button>
+        <button>Home</button>
+        <button>Orders</button>
 	</div>
-<form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-<font size ="+2">
- Product Name: <input type="text" id="name" size="40" name="name" value="<?php echo $name; ?>">
-<br>
- <label for="type">Type:</label>
-<select id="type" value="<?php echo $type; ?>">
-	<option value="shirt">Shirt</option>
-	<option value="hat">Hat</option>
-	<option value="pants">Pants</option>
-</select>
-
-
-<br>
- <label for="color">Color:</label>
-<select id="color"  value="<?php echo $color; ?>">
-	<option value="red">Red</option>
-	<option value="blue">Blue</option>
-	<option value="green">Green</option>
-</select>
-<br>
- Cost: <input type="text" id="cost" size="20" name="cost"  value="<?php echo $cost; ?>">
-<br>
-Quantity: <input type="text" id="quantity" size="20" name="quan"  value="<?php echo $quan; ?>">
-<br>
-URL to Image of Product: <input type="text" id="pic" size="80 name="pic"  value="<?php echo $pic; ?>">	
-<br>
-</font>
-<input type="submit" value="submit">
- </form>
-   <?php include('bottombar.php'); ?>
+    <br>
+        <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+            <font size ="+2">
+                Product Name: <input type="text" id="name" size="40" name="name">
+                <span class="error"> <?php echo $name_err;?></span>
+                <br>
+                <label for="type">Type:</label>
+                <select name="type" id="type">
+                    <option value="">Select Type</option>
+                    <option value="shirt">Shirt</option>
+                    <option value="hat">Hat</option>
+                    <option value="pants">Pants</option>
+                </select>
+                <span class="error"> <?php echo $type_err;?></span>
+                <br>
+                <label for="color">Color:</label>
+                <select name="color" id="color">
+                    <option value="">Select Color</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                </select>
+                <span class="error"> <?php echo $color_err;?></span>
+                <br>
+                Cost: $<input type="number" name="cost" min="0.01" step="0.01" max="2500"/>
+                <span class="error"> <?php echo $cost_err;?></span>
+                <br>
+                Quantity: <input type="number" name="quantity" id="quantity" min="0" max="100">
+                <span class="error"> <?php echo $quantity_err;?></span>
+                <br>
+                Image of Product: <input type="file" id="file" size="80" name="file">
+                <span class="error"> <?php echo $fileStatusMsg;?></span>	
+                <br>
+                <input type="submit" name= "submit" value="Upload">
+            </font>
+        </form>
+    <br>
+        <?php include('bottombar.php'); ?>
     </body>
 </html>

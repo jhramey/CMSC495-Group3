@@ -12,7 +12,7 @@ CREATE TABLE `store` (
   `type` varchar(255) NOT NULL,
   `color` varchar(255) NOT NULL,
   `cost` float NOT NULL,
-  `quan` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `pic` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
