@@ -28,6 +28,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
             MYSQL_DATABASE: ConsumerWebsite
+            MYSQL_INITDB_SKIP_TZINFO: 1
 
     adminer:
         image: adminer
