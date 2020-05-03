@@ -30,6 +30,32 @@ session_start();
                 <input type="submit" value="Filter">
             </form>
         </div>
+        <?php
+            require_once "config.php";
+
+            // Get images from the database
+            $query = $link->query("SELECT * FROM store");
+
+            if($query->num_rows > 0){
+                while($row = $query->fetch_assoc()){
+                    $imageURL = $row["pic"];
+                    $cost = $row["cost"];
+                    $item_id = $row["id"];
+
+        ?>
+        <div id="item">
+            <img id="item-image" src="<?php echo $imageURL; ?>" alt="" />
+            <p>Price: $<?php echo $cost;?></p>
+            <button id="cart-button" type="button" value=<?php echo $item_id;?>>Add To Cart</button>
+            <button id="wish-button" type="button" value=<?php echo $item_id;?>>Add To Wishlist</button>
+        </div>
+        <div id="space"></div>
+        <?php }
+        }else{ ?>
+            <p>No image(s) found...</p>
+        <?php } ?>
+
+        <!--
         <div id="item">
             <h3>Black T-Shirt</h3>
             <img id="item-image" src="images\black-tshirt.jpg">
@@ -52,6 +78,6 @@ session_start();
             <p>Price: $20</p>
             <button id="cart-button" type="button">Add To Cart</button>
             <button id="wish-button" type="button">Add To Wishlist</button>
-        </div>
+        </div> -->
     </body>
 </html>
