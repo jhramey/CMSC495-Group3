@@ -160,9 +160,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label for="color">Color:</label>
                 <select name="color" id="color">
                     <option value="">Select Color</option>
-                    <option value="red">Red</option>
+                    <option value="black">Black</option>
                     <option value="blue">Blue</option>
                     <option value="green">Green</option>
+                    <option value="red">Red</option>
                 </select>
                 <span class="error"> <?php echo $color_err;?></span>
                 <br>
