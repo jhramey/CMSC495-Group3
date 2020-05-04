@@ -10,6 +10,7 @@ CREATE TABLE `wishlist` (
   `user_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
+  `dateAdded` date NOT NULL DEFAULT '0000-00-00',
   KEY `user_id` (`user_id`),
   KEY `item_id` (`item_id`),
   CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
