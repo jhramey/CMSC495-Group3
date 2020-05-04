@@ -12,7 +12,7 @@ CREATE TABLE `users` (
   `lastName` varchar(50) NOT NULL, 
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `created_at` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
