@@ -10,7 +10,7 @@ CREATE TABLE `cart` (
   `user_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `dateAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp(),
+  `dateAdded` date NOT NULL DEFAULT '0000-00-00',
   KEY `item_id` (`item_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `cart_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `store` (`id`),
