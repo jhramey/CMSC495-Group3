@@ -2,6 +2,15 @@
 session_start();
 require_once "config.php";
 
+if ($_SESSION['username'] != "admin") {
+   header('Location: NotAdmin.php');
+
+}
+
+
+
+
+
 
 $name = $type = $color = "";
 $cost = $quantity = "";
