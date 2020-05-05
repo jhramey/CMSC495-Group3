@@ -2,49 +2,8 @@
 session_start();
 
 require_once "config.php";
+include("alterTable.php");
 $statusMsg = "";
-
-function addItem($table, $item_id, $link) {
-    global $statusMsg;
-    $param_user_id = trim($_SESSION["id"]);
-
-    // Prepare a select statement
-    $sql = "SELECT * FROM {$table} WHERE user_id = ? AND item_id = ?";
-
-    if($stmt = mysqli_prepare($link, $sql)){
-        // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "ii", $param_user_id, $item_id);            
-        
-        // Attempt to execute the prepared statement
-        if(mysqli_stmt_execute($stmt)){
-            // Store result
-            mysqli_stmt_store_result($stmt);
-                            
-            // Check if cart exists
-            if(mysqli_stmt_num_rows($stmt) == 1)  {
-                mysqli_stmt_bind_result($stmt, $user_id, $item_id, $quantity, $dateAdded);
-                if(mysqli_stmt_fetch($stmt)) {
-                    $dateAdded = date("Y-m-d");
-                    $newQuantity = $quantity + 1;
-                    $sql = "UPDATE {$table} SET quantity = '$newQuantity' WHERE user_id = '$user_id' AND item_id = '$item_id'";
-                    if(mysqli_query($link, $sql)){
-                        $statusMsg = "Successfully updated quantity of item in $table";
-                    } else {
-                        $statusMsg = "Updating quantity in database was unsuccessful";
-                    }
-                }
-            } else {
-                $dateAdded = date("Y-m-d");
-                $sql = "INSERT INTO {$table} (user_id, item_id, quantity, dateAdded) VALUES ('$param_user_id','$item_id', 1, '$dateAdded')";
-                if(mysqli_query($link, $sql)){
-                    $statusMsg = "Successfully added item to $table";
-                } else {
-                    $statusMsg = "Error adding item to cart: " . mysqli_error($link);
-                }
-            }
-        }
-    }
-}
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if(!$_SESSION["loggedin"]) {
@@ -53,10 +12,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(isset(($_POST["addToCart"]))) {
         // Add item to cart
-        addItem("cart", $_POST["addToCart"], $link);
+        addItem($link, "cart", $_POST["addToCart"]);
     } else if(isset(($_POST["addToWish"]))) {
         // Add item to wishlist
-        addItem("wishlist", $_POST["addToWish"], $link);
+        addItem($link, "wishlist", $_POST["addToWish"]);
     } else {
         $statusMsg = "An error has occurred";
     }    
