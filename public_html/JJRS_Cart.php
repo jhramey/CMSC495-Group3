@@ -1,11 +1,25 @@
 <?php
 session_start();
 require_once "config.php";
+include("alterTable.php");
 
 if(!$_SESSION["loggedin"]) {
     header("location: JJRS_Login.php");
 } else {
     $param_user_id = trim($_SESSION["id"]);
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(!$_SESSION["loggedin"]) {
+        header("location: JJRS_Login.php");
+    }
+
+    if(isset(($_POST["removeFromCart"]))) {
+        // Remove item from Cart
+        removeItem($link, "cart", $_POST["removeFromCart"]);
+    } else {
+        $statusMsg = "An error has occurred";
+    }
 }
 ?>
 
@@ -46,5 +60,6 @@ if(!$_SESSION["loggedin"]) {
         }else{ ?>
             <p>Cart is empty...</p>
         <?php } ?>
+        <h1><?php echo $statusMsg;?></h1>
     </body>
 </html>

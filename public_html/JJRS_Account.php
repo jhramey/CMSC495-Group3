@@ -1,11 +1,28 @@
 <?php
 session_start();
 require_once "config.php";
+include("alterTable.php");
 
 if(!$_SESSION["loggedin"]) {
     header("location: JJRS_Login.php");
 } else {
     $param_user_id = trim($_SESSION["id"]);
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(!$_SESSION["loggedin"]) {
+        header("location: JJRS_Login.php");
+    }
+
+    if(isset(($_POST["removeFromWish"]))) {
+        // Remove item from wishlist
+        removeItem($link, "wishlist", $_POST["removeFromWish"]);
+    } else if(isset(($_POST["addToCart"]))) {
+        // Add item to wishlist
+        addItem($link, "cart", $_POST["addToCart"]);
+    } else {
+        $statusMsg = "An error has occurred";
+    }
 }
 ?>
 
@@ -33,6 +50,7 @@ if(!$_SESSION["loggedin"]) {
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <img id="item-image" src="<?php echo $imageURL; ?>" alt="" />
                 <p>Price: $<?php echo $cost;?></p>
+                <button id="cart-button" type="submit" value=<?php echo $item_id;?> name="addToCart">Add To Cart</button>
                 <button id="wish-button" type="submit" value=<?php echo $item_id;?> name="removeFromWish">Remove From Wishlist</button>
             </form>
         </div>
@@ -41,5 +59,6 @@ if(!$_SESSION["loggedin"]) {
         }else{ ?>
             <p>Wishlist is empty...</p>
         <?php } ?>
+        <h1><?php echo $statusMsg;?></h1>
     </body>
 </html>
