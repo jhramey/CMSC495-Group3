@@ -1,19 +1,21 @@
 <?php
+session_start();
 // Include config file
 require_once "config.php";
 
 $firstName = $lastName = "";
 $firstName_err = $lastName_err = "";
+$attempts = "";
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
- 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-
+   
+   
     // Validate Name
     $firstName = trim($_POST["firstName"]);
     $lastName = trim($_POST["lastName"]);
-
+   
     if(empty($firstName)) {
         $firstName_err = "Please enter a first name.";
     } else if (preg_match('[\W]', $firstName)) {
@@ -79,20 +81,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     // Check input errors before inserting in database
     if(empty($firstName_err) && empty($lastName_err) && empty($username_err) && empty($password_err) && empty($confirm_password_err)){
-        
+       
         // Prepare an insert statement
-        $sql = "INSERT INTO users (firstName, lastName, username, password) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO users (firstName, lastName, username, password, attempts) VALUES (?, ?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssss", $param_firstName, $param_lastName, $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "ssssi", $param_firstName, $param_lastName, $param_username, $param_password, $param_attempts);
             
             // Set parameters
             $param_firstName = $firstName;
             $param_lastName = $lastName;
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            
+            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash       
+	    $param_attempts = 0;
+
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
@@ -100,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "Something went wrong. Please try again later.";
             }
-
+		
             mysqli_stmt_close($stmt);
         }
     }
@@ -144,6 +147,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <span class="error"> <?php echo $confirm_password_err;?></span>
             <br><br>
             <input type="submit" value="Register">
+
         </form>
     </body>
 </html>
