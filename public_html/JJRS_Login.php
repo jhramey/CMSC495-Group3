@@ -53,44 +53,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $firstName, $username, $hashed_password, $attempts);
                     if(mysqli_stmt_fetch($stmt)) {
-
-			if($attempts < 0){
-				//Checks to see if to many login attempts were attempted
-				
-                        if(password_verify($password, $hashed_password)) {
-                            // Password is correct, so start a new session
-                            session_start();
-                            
-                            // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;
-                            $_SESSION["firstName"] = $firstName;
-			    $_SESSION["attempts"] = $attempts;
-                            
-                            // Redirect user to welcome page
-                            header("location: index.php");
-			
-                        } else {
-                            // Display an error message if password is not valid
-                         
-			$attempts = $attempts +1;
-                        echo (int) $attempts;
-		
-
-
-
-                            $password_err = "The password you entered was not valid.";
-				
+                        if($attempts <= 3) {
+                            //Checks to see if to many login attempts were attempted
+                            if(password_verify($password, $hashed_password)) {
+                                // Password is correct, so start a new session
+                                session_start();
+                                
+                                // Store data in session variables
+                                $_SESSION["loggedin"] = true;
+                                $_SESSION["id"] = $id;
+                                $_SESSION["username"] = $username;
+                                $_SESSION["firstName"] = $firstName;
+                                $_SESSION["attempts"] = $attempts;
+                                
+                                // Redirect user to welcome page
+                                header("location: index.php");
+                            } else {
+                                // Display an error message if password is not valid
+                                $attempts = $attempts +1;
+                                echo (int) $attempts;
+                                $password_err = "The password you entered was not valid.";
+                            }
+                        } else{
+                            $password_err = "To many failed login attempts";
                         }
-			}else{
-		 $password_err = "To many failed login attempts";
-
-}
-								
-
-
-}
+                    }
                 } else {
                     // Display an error message if username doesn't exist
                     $username_err = "No account found with that username.";
@@ -98,7 +85,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
             // Close statement
             mysqli_stmt_close($stmt);
         }
