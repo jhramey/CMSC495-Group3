@@ -7,11 +7,7 @@ if ($_SESSION['username'] != "admin") {
 
 }
 
-
-
-
-
-
+$statusMsg = "";
 $name = $type = $color = "";
 $cost = $quantity = "";
 $name_err = $type_err = $color_err = "";
@@ -26,8 +22,6 @@ $fileStatusMsg = "";
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-
     // Validate Product Name
     if(empty(trim($_POST["name"]))){
         $name_err = "Please enter a Product Name.";
@@ -125,7 +119,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_pic = $targetFilePath;
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
-               
+                $statusMsg = "Item has been successfully uploaded to the store!";
             } else{
                 echo "Something went wrong. Please try again later.";
             }
@@ -188,6 +182,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="submit" name= "submit" value="Upload">
             </font>
         </form>
+        <h1><?php echo $statusMsg;?></h1>
     <br>
         <?php include('bottombar.php'); ?>
     </body>
