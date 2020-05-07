@@ -109,12 +109,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="username">Username:</label>
                 <br>
                 <input type="text" id="username" name="username" value="">
-                <span class="error"> <?php echo $username_err;?></span>
+                <br>
+                <span style="color: red;" class="error"> <?php echo $username_err;?></span>
                 <br>
                 <label for="password">Password:</label>
                 <br>
                 <input type="password" id="password" name="password" value="">
-                <span class="error"> <?php echo $password_err;?></span>
+                <br>
+                <span style="color: red;" class="error"> <?php echo $password_err;?></span>
                 <br><br>
                 <input type="submit" value="Login">
             </form>
