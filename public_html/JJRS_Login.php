@@ -117,7 +117,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" id="password" name="password" value="">
                 <br>
                 <span style="color: red;" class="error"> <?php echo $password_err;?></span>
-                <br><br>
+                <br>
                 <input type="submit" value="Login">
             </form>
             <p>Don't have an account? Register <a href="JJRS_Register.php">Here</a></p>
