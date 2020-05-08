@@ -4,6 +4,7 @@ session_start();
 require_once "config.php";
 include("alterTable.php");
 $statusMsg = "";
+$price_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if(!$_SESSION["loggedin"]) {
@@ -16,9 +17,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if(isset(($_POST["addToWish"]))) {
         // Add item to wishlist
         addItem($link, "wishlist", $_POST["addToWish"]);
-    } else {
-        $statusMsg = "An error has occurred";
-    }    
+    }  
 }
 ?>
 
@@ -32,27 +31,87 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include('navbar.php'); ?>
         <div style="height:25px;"></div>
         <div id="filter-div">
-            <form id="filter">
-                <select id="type">
+            <form id="filter" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <label for="type">Filter By Type:</label>
+                <select id="type" name="filter[type]">
+                    <option/>
                     <option value="shirt">Shirt</option>
                     <option value="hat">Hat</option>
                     <option value="pants">Pants</option>
                 </select>
-                <select id="color">
+                <br>
+                <label for="color">Filter By Color:</label>
+                <select id="color" name="filter[color]">
+                    <option/>
                     <option value="black">Black</option>
-                    <option value="blue">blue</option>
-                    <option value="red">Pants</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="red">Red</option>
                 </select>
-                <div class="slidecontainer">
-                    <h3>Price Range: <span id="price"></span></h3>
-                    <input type="range" min="1" max="100" value="50" class="slider" id="price-slider">
-                </div>
+                <br>
+                <label for="price">Filter By Price: </label>
+                $
+                <input type="text" id="price" name="filter[lowPrice]" value="">
+                to $
+                <input type="text" id="price" name="filter[highPrice]" value="">
+                <br>
                 <input type="submit" value="Filter">
             </form>
         </div>
+        <br>
         <?php
+            $sql = "SELECT * FROM store";
+            $message = "Filters were not used! Only numberic characters can be entered for a price filter.";
+            $price_err = "<script type='text/javascript'>alert('$message');</script>";
+
+            // If a filter has been set
+            if(isset($_POST["filter"])) {
+                $filter = $_POST["filter"];
+
+                if(!empty($filter['type'])) {
+                    $type = "type='" . $filter['type'] . "' AND ";
+                }
+
+                if(!empty($filter['color'])) {
+                    $color = "color='" . $filter['color'] . "' AND ";
+                }
+
+                if(!empty($filter['lowPrice']) && !empty($filter['highPrice'])) {
+                    if(is_numeric($filter['lowPrice']) && is_numeric($filter['highPrice'])) {
+                        $price = "cost >= '" . $filter['lowPrice'] . "' AND cost <= '" .  $filter['highPrice'] . "' AND ";
+                    } else {
+                        echo $price_err;
+                    }
+                } elseif(!empty($filter['lowPrice'])) {
+                    if(is_numeric($filter['lowPrice'])) {
+                        $price = "cost >= '" . $filter['lowPrice'] . "' AND ";
+                    } else {
+                        echo $price_err;
+                    }
+                } elseif(!empty($filter['highPrice'])) {
+                    if(is_numeric($filter['highPrice'])) {
+                        $price .= "cost <= '" .  $filter['highPrice'] . "' AND ";
+                    } else {
+                        echo $price_err;
+                    }
+                }
+            }
+                if(!empty($type) || !empty($color) || !empty($price)) {
+                    $sql .= " WHERE ";
+                    if(!empty($type)) {
+                        $sql .= $type;
+                    }
+                    if(!empty($color)) {
+                        $sql .= $color;
+                    }
+                    if(!empty($price)) {
+                        $sql .= $price;
+                    }
+                    $sql = substr($sql,0,-5);
+                }
+
             // Get images from the database
-            $query = $link->query("SELECT * FROM store");
+            $query = $link->query($sql);
 
             if($query->num_rows > 0){
                 while($row = $query->fetch_assoc()){
