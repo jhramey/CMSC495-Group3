@@ -53,44 +53,52 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // QUERY TO GET ITEM ID and ITEM NAME
         $sql = "SELECT store.name, cart.quantity, store.cost FROM cart INNER JOIN store ON store.id = cart.item_id WHERE user_id = {$user_id}";
+        
         if($result = mysqli_query($link, $sql)) {
-            while ($row = $result->fetch_row()) {
-                $items[] = $row;
+            if(mysqli_num_rows($result)==0) {
+                $statusMsg = "Cart is empty";
+                $emptyCart = true;
+            } else {
+                while ($row = $result->fetch_row()) {
+                    $items[] = $row;
+                }
+                mysqli_free_result($result);
             }
-            mysqli_free_result($result);
         }
 
-        // Prepare an insert statement
-        $sql = "INSERT INTO orders (user_id, firstName, lastName, address, items) VALUES (?, ?, ?, ?, ?)";
-         
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "issss", $param_user_id, $param_firstName, $param_lastName, $param_address, $param_items);
+        if(!$emptyCart) {
+            // Prepare an insert statement
+            $sql = "INSERT INTO orders (user_id, firstName, lastName, address, items) VALUES (?, ?, ?, ?, ?)";
             
-            // Set parameters
-            $param_user_id = $user_id;
-            $param_firstName = $firstName;
-            $param_lastName = $lastName;
-            $param_address = $address;
-	        $param_items = json_encode($items);
+            if($stmt = mysqli_prepare($link, $sql)){
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "issss", $param_user_id, $param_firstName, $param_lastName, $param_address, $param_items);
+                
+                // Set parameters
+                $param_user_id = $user_id;
+                $param_firstName = $firstName;
+                $param_lastName = $lastName;
+                $param_address = $address;
+                $param_items = json_encode($items);
 
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)) {
-                $statusMsg = "FirstName = $firstName<br>LastName = $lastName<br>Address = $address<br>";
-                $statusMsg .= "<br>Your credit card has been billed for the following items: ";
-                foreach($items as $item) {
-                    $statusMsg .= "<br>&#9;Name: $item[0]&#9;Cost: $$item[2]";
-                    $total += $item[2];
-                }
-                $statusMsg .= "<br><br>Total order cost: $" . number_format((float)$total, 2, '.', '');
-                $sql = "DELETE FROM cart WHERE user_id=$param_user_id";
-                if(!mysqli_query($link, $sql)){
+                // Attempt to execute the prepared statement
+                if(mysqli_stmt_execute($stmt)) {
+                    $statusMsg = "FirstName = $firstName<br>LastName = $lastName<br>Address = $address<br>";
+                    $statusMsg .= "<br>Your credit card has been billed for the following items: ";
+                    foreach($items as $item) {
+                        $statusMsg .= "<br>&#9;Name: $item[0]&#9;Cost: $$item[2]";
+                        $total += $item[2];
+                    }
+                    $statusMsg .= "<br><br>Total order cost: $" . number_format((float)$total, 2, '.', '');
+                    $sql = "DELETE FROM cart WHERE user_id=$param_user_id";
+                    if(!mysqli_query($link, $sql)){
+                        echo "ERROR: " . mysqli_error($link);
+                    }
+                } else{
                     echo "ERROR: " . mysqli_error($link);
                 }
-            } else{
-                echo "ERROR: " . mysqli_error($link);
+                mysqli_stmt_close($stmt);
             }
-            mysqli_stmt_close($stmt);
         }
     }
 }
