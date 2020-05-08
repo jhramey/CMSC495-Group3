@@ -6,15 +6,9 @@
     <body> 
         </div>
         <div id="link-bar">
-            
-                
-                    <p>About</p>
-               
-           
-               <p>Privacy Policy</p>
-                
+            <p>About</p>
+            <p>Privacy Policy</p>
 			<p>©2020 JJRS, LLC</p>
-            </div>
-        
+        </div>
     </body>
 </html>

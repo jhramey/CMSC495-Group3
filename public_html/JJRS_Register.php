@@ -94,7 +94,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_lastName = $lastName;
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash       
-	    $param_attempts = 0;
+	        $param_attempts = 0;
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -103,11 +103,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "Something went wrong. Please try again later.";
             }
-		
             mysqli_stmt_close($stmt);
         }
     }
-    
     mysqli_close($link);
 }
 ?>

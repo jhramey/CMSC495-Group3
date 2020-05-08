@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div id="space"></div>
         <?php }
-        }else{ ?>
+        }else { ?>
             <p>Wishlist is empty...</p>
         <?php } ?>
         <h1><?php echo $statusMsg;?></h1>

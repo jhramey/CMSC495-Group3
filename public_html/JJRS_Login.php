@@ -72,16 +72,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 // Display an error message if password is not valid
                                 $attempts = $attempts +1;
 				
-				$sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
-				if(mysqli_query($link, $sql)){
-				} else 
-				{
-				mysqli_error($link);
-				}
-
-
-
-
+                                $sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
+                                if(mysqli_query($link, $sql)){
+                                } else 
+                                {
+                                mysqli_error($link);
+                                }
 
                                 $password_err = "The password you entered was not valid.";
                             }

@@ -11,6 +11,6 @@ session_start();
     <body>
         <?php include('navbar.php'); ?>
         <h1> Not authorized to view this page </h1>
-   <?php include('bottombar.php'); ?>
+        <?php include('bottombar.php'); ?>
     </body>
 </html>

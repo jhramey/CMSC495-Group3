@@ -70,7 +70,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             // Prepare an insert statement
             $sql = "INSERT INTO orders (user_id, firstName, lastName, address, items) VALUES (?, ?, ?, ?, ?)";
             
-            if($stmt = mysqli_prepare($link, $sql)){
+            if($stmt = mysqli_prepare($link, $sql)) {
                 // Bind variables to the prepared statement as parameters
                 mysqli_stmt_bind_param($stmt, "issss", $param_user_id, $param_firstName, $param_lastName, $param_address, $param_items);
                 
@@ -91,10 +91,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     $statusMsg .= "<br><br>Total order cost: $" . number_format((float)$total, 2, '.', '');
                     $sql = "DELETE FROM cart WHERE user_id=$param_user_id";
-                    if(!mysqli_query($link, $sql)){
+                    if(!mysqli_query($link, $sql)) {
                         echo "ERROR: " . mysqli_error($link);
                     }
-                } else{
+                } else {
                     echo "ERROR: " . mysqli_error($link);
                 }
                 mysqli_stmt_close($stmt);

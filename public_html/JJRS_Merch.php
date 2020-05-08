@@ -75,30 +75,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>No image(s) found...</p>
         <?php } ?>
         <h1><?php echo $statusMsg;?></h1>
-
-        <!--
-        <div id="item">
-            <h3>Black T-Shirt</h3>
-            <img id="item-image" src="images\black-tshirt.jpg">
-            <p>Price: $15</p>
-            <button id="cart-button" type="button">Add To Cart</button>
-            <button id="wish-button" type="button">Add To Wishlist</button>
-        </div>
-        <div id="space"></div>
-        <div id="item">
-            <h3>Black Hat</h3>
-            <img id="item-image" src="images\black-hat.jpg">
-            <p>Price: $10</p>
-            <button id="cart-button" type="button">Add To Cart</button>
-            <button id="wish-button" type="button">Add To Wishlist</button>
-        </div>
-        <div id="space"></div>
-        <div id="item">
-            <h3>Blue Jeans</h3>
-            <img id="item-image" src="images\blue-jeans.jpg">
-            <p>Price: $20</p>
-            <button id="cart-button" type="button">Add To Cart</button>
-            <button id="wish-button" type="button">Add To Wishlist</button>
-        </div> -->
     </body>
 </html>

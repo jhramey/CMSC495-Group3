@@ -5,7 +5,7 @@ session_start();
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: index.php");
     exit;
-  }
+}
 
 //Include config with database info
 require_once "config.php";
@@ -55,27 +55,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     if(mysqli_stmt_fetch($stmt)) {
                             if(password_verify($password, $hashed_password)) {
                                 // Password is correct, so start a new session
-                               
+                                $attempts = 0;
 
-				$attempts = 0;
-
-				$sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
-				if(mysqli_query($link, $sql)){
-
-				$password_err = "Password Attempts Reset.";
-				} else 
-				{
-				mysqli_error($link);
-				} 
-
-
-
-
-
-
-                            
+                                $sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
+                                if(mysqli_query($link, $sql)){
+                                    $password_err = "Password Attempts Reset.";
+                                } else {
+                                    mysqli_error($link);
+                                } 
                             } else {
-
                                 $password_err = "The password you entered was not valid.";
                             } 
                     }
