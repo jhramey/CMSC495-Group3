@@ -92,10 +92,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     $statusMsg .= "<br><br>Total order cost: $" . number_format((float)$total, 2, '.', '');
                     $sql = "DELETE FROM cart WHERE user_id=$param_user_id";
                     if(!mysqli_query($link, $sql)) {
-                        echo "ERROR: " . mysqli_error($link);
+                        echo "Unable to checkout at this time";
                     }
                 } else {
-                    echo "ERROR: " . mysqli_error($link);
+                    echo "Unable to checkout at this time";
                 }
                 mysqli_stmt_close($stmt);
             }

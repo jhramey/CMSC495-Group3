@@ -60,9 +60,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
                                 if(mysqli_query($link, $sql)){
                                     $password_err = "Password Attempts Reset.";
-                                } else {
-                                    mysqli_error($link);
-                                } 
+                                }
                             } else {
                                 $password_err = "The password you entered was not valid.";
                             } 
@@ -84,40 +82,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html>
     <head>
         <title>Password Resete</title>
         <link rel="stylesheet" type="text/css" href="JJRS_CSS.css">
     </head>
-
-
-
-
-
-
-
-
-
     <body>
         <?php include('navbar.php'); ?>
         <h1> Reset Password Form</h1>
@@ -135,8 +105,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             <br><br>
             <input type="submit" value="Reset">
         </form>
-
-
-   <?php include('bottombar.php'); ?>
+    <?php include('bottombar.php'); ?>
     </body>
 </html>

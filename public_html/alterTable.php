@@ -28,7 +28,7 @@ function addItem($link, $table, $item_id) {
                     if(mysqli_query($link, $sql)){
                         $statusMsg = "Successfully updated quantity of item in $table";
                     } else {
-                        $statusMsg = "Updating quantity in database was unsuccessful: " . mysqli_error($link);
+                        $statusMsg = "Updating quantity in database was unsuccessful.";
                     }
                 }
             } else {
@@ -37,7 +37,7 @@ function addItem($link, $table, $item_id) {
                 if(mysqli_query($link, $sql)){
                     $statusMsg = "Successfully added item to $table";
                 } else {
-                    $statusMsg = "Error adding item to $table: " . mysqli_error($link);
+                    $statusMsg = "Error adding item to $table.";
                 }
             }
         }
@@ -71,14 +71,14 @@ function removeItem($link, $table, $item_id) {
                         if(mysqli_query($link, $sql)){
                             $statusMsg = "Successfully removed 1 quantity of item in $table";
                         } else {
-                            $statusMsg = "Removing 1 quantity in $table was unsuccessful: " . mysqli_error($link);
+                            $statusMsg = "Removing 1 quantity in $table was unsuccessful.";
                         }
                     } else if ($quantity == 1) {
                         $sql = "DELETE FROM {$table} WHERE user_id='$user_id' and item_id='$item_id'";
                         if(mysqli_query($link, $sql)){
                             $statusMsg = "Successfully removed item from $table";
                         } else {
-                            $statusMsg = "Error removing item from $table: " . mysqli_error($link);
+                            $statusMsg = "Error removing item from $table.";
                         }
                     } else {
                         $statusMsg = "Error has occured that item is in table but does not have any quantity";
