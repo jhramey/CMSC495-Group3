@@ -53,41 +53,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $firstName, $username, $hashed_password, $attempts);
                     if(mysqli_stmt_fetch($stmt)) {
-                        if($attempts <= 3) {
-                            //Checks to see if to many login attempts were attempted
                             if(password_verify($password, $hashed_password)) {
                                 // Password is correct, so start a new session
-                                session_start();
-                                
-                                // Store data in session variables
-                                $_SESSION["loggedin"] = true;
-                                $_SESSION["id"] = $id;
-                                $_SESSION["username"] = $username;
-                                $_SESSION["firstName"] = $firstName;
-                                $_SESSION["attempts"] = $attempts;
-                                
-                                // Redirect user to welcome page
-                                header("location: index.php");
-                            } else {
-                                // Display an error message if password is not valid
-                                $attempts = $attempts +1;
-				
+                               
+
+				$attempts = 0;
+
 				$sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
 				if(mysqli_query($link, $sql)){
+
+				$password_err = "Password Attempts Reset.";
 				} else 
 				{
 				mysqli_error($link);
-				}
+				} 
 
 
 
 
+
+
+                            
+                            } else {
 
                                 $password_err = "The password you entered was not valid.";
-                            }
-                        } else{
-                            $password_err = "To many failed login attempts";
-                        }
+                            } 
                     }
                 } else {
                     // Display an error message if username doesn't exist
@@ -106,33 +96,59 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
     <head>
-        <title>JJRS Login</title>
+        <title>Password Resete</title>
         <link rel="stylesheet" type="text/css" href="JJRS_CSS.css">
     </head>
+
+
+
+
+
+
+
+
+
     <body>
         <?php include('navbar.php'); ?>
-        <div id="login-div">
-            <div style="height: 200px;"></div>
-            <form id="login" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <label for="username">Username:</label>
-                <br>
-                <input type="text" id="username" name="username" value="">
-                <br>
-                <span style="color: red;" class="error"> <?php echo $username_err;?></span>
-                <br>
-                <label for="password">Password:</label>
-                <br>
-                <input type="password" id="password" name="password" value="">
-                <br>
-                <span style="color: red;" class="error"> <?php echo $password_err;?></span>
-                <br>
-                <input type="submit" value="Login">
-            </form>
-            <p>Don't have an account? Register <a href="JJRS_Register.php">Here</a></p>
-	    <p>Locked Out? Click <a href="ForgotPassword.php">Here</a></p>
-        </div>
+        <h1> Reset Password Form</h1>
+       <form id="reset" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+           
+            <label for="username">Enter Username:</label>
+            <br>
+            <input type="text" id="username" name="username" value="<?php echo $username; ?>">
+            <span class="error"> <?php echo $username_err;?></span>
+            <br>
+            <label for="password">Last Password:</label>
+            <br>
+            <input type="password" id="password" name="password" value="">
+            <span class="error"> <?php echo $password_err;?></span>      
+            <br><br>
+            <input type="submit" value="Reset">
+        </form>
+
+
+   <?php include('bottombar.php'); ?>
     </body>
 </html>
