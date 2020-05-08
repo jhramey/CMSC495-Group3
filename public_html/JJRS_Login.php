@@ -74,11 +74,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 				
                                 $sql = "UPDATE users SET attempts = '$attempts' WHERE id = '$id'";
                                 if(mysqli_query($link, $sql)){
-                                } else 
-                                {
-                                mysqli_error($link);
                                 }
-
                                 $password_err = "The password you entered was not valid.";
                             }
                         } else{
