@@ -143,7 +143,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <h1>Admin Page</h1>
 	<div class="row">
         <button>Home</button>
-        <button>Orders</button>
+        <button onclick="location.href='JJRS_Order.php'">Orders</button>
 	</div>
     <br>
         <form id="register" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
