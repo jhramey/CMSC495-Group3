@@ -52,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($firstName_err) && empty($lastName_err) && empty($creditCard_err) && empty($address_err)) {
 
         // QUERY TO GET ITEM ID and ITEM NAME
-        $sql = "SELECT store.name, store.cost FROM cart INNER JOIN store ON store.id = cart.item_id WHERE user_id = {$user_id}";
+        $sql = "SELECT store.name, cart.quantity, store.cost FROM cart INNER JOIN store ON store.id = cart.item_id WHERE user_id = {$user_id}";
         if($result = mysqli_query($link, $sql)) {
             while ($row = $result->fetch_row()) {
                 $items[] = $row;
