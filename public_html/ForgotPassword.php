@@ -85,7 +85,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Password Resete</title>
+        <title>Password Reset</title>
         <link rel="stylesheet" type="text/css" href="JJRS_CSS.css">
     </head>
     <body>
