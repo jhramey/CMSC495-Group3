@@ -42,7 +42,9 @@ session_start();
                 <h1 id="names">J</h1>
             </div>
             <div id="personal-body" style="text-align: left">
-                <p>Jayson Ramey - </p>
+                <p>Jayson Ramey - Jayson is graduating from UMGC with his Bachelor's degree in Computer Science during the Spring 2020 semester. Following graduation, Jayson will continue to strive to become a software engineer
+                    for the National Security Agency where he currently works as a systems administrator. 
+                </p>
             </div>
         </div>
         <div id="name-block">
