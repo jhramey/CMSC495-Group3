@@ -60,8 +60,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_free_result($result);
         }
 
-        //$statusMsg = "Items in cart: " . json_encode($items);
-
         // Prepare an insert statement
         $sql = "INSERT INTO orders (user_id, firstName, lastName, address, items) VALUES (?, ?, ?, ?, ?)";
          
@@ -77,14 +75,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	        $param_items = json_encode($items);
 
             // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
+            if(mysqli_stmt_execute($stmt)) {
                 $statusMsg = "FirstName = $firstName<br>LastName = $lastName<br>Address = $address<br>";
                 $statusMsg .= "<br>Your credit card has been billed for the following items: ";
                 foreach($items as $item) {
-                    $statusMsg .= "<br>&#9;Name: $item[0]&#9;Cost: $$item[1]";
-                    $total += $item[1];
+                    $statusMsg .= "<br>&#9;Name: $item[0]&#9;Cost: $$item[2]";
+                    $total += $item[2];
                 }
                 $statusMsg .= "<br><br>Total order cost: $" . number_format((float)$total, 2, '.', '');
+                $sql = "DELETE FROM cart WHERE user_id=$param_user_id";
+                if(!mysqli_query($link, $sql)){
+                    echo "ERROR: " . mysqli_error($link);
+                }
             } else{
                 echo "ERROR: " . mysqli_error($link);
             }
